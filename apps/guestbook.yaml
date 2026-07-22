@@ -1,1 +1,25 @@
-
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: guestbook
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: guestbook
+    name: k3s-external
+  project: default
+  source:
+    # morey's guestbook app doesn't work but forked from argopro, so go to the source
+    # path: general/helm-guestbook
+    path: guestbook
+    # repoURL: https://github.com/morey-tech/argocd-example-apps
+    repoURL: https://github.com/argoproj/argocd-example-apps
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
